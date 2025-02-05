@@ -1,7 +1,7 @@
-# Autonomous Highway Simulation System
+# Highway Simulation
 
 ## **Project Overview**
-This project is an advanced **autonomous highway simulation environment** designed to model and evaluate autonomous driving behaviors, particularly focused on lane-changing, velocity control, and safe navigation in highway scenarios. The system simulates real-world scenarios, allowing for testing of decision-making algorithms, trajectory planning, and dynamic vehicle control.
+This project is an advanced **highway simulation environment** designed to model and evaluate autonomous driving behaviors, particularly focused on lane-changing, velocity control, and safe navigation in highway scenarios. The system simulates real-world scenarios, allowing for testing of decision-making algorithms, trajectory planning, and dynamic vehicle control.
 
 The aim of the project is to **develop and simulate an ego vehicle that can navigate highways autonomously**, adhering to traffic rules, maintaining high speeds within the speed limit, and performing safe overtaking maneuvers. It integrates reinforcement learning, trajectory generation, and a modular simulation environment for autonomous driving research.
 

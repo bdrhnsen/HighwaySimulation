@@ -1,0 +1,14 @@
+board 
+env
+models
+run
+tmp
+train_data
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+.eggs/

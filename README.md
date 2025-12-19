@@ -87,5 +87,171 @@ For further details of the visualization on the right, check out [Reinforcement 
 
 
 ---
+## Installation
+
+Clone the repository and install the required dependencies:
+
+```bash
+# Clone the repository
+# create a virtualenv and install requirements
+python -m venv env && source /env/bin/activate && pip install requirements.txt
+
+# Install the package
+cd highway_simulation
+pip install -e .
+
+# Run the trained agent
+ cd .. && python main.py
+
+```
+
+
+## Getting Started
+
+### 1. Environment Setup
+
+The primary environment, `HighwayEnv`, is registered under Gymnasium. Here's how to create and test the environment:
+
+```python
+import gymnasium as gym
+from highway_simulation.environments.relative_to_ego_highway_env import HighwayEnv
+
+# Initialize the environment
+env = gym.make("highway_env")
+
+# Test the environment
+obs = env.reset()
+for _ in range(100):
+    action = env.action_space.sample()  # Take random actions
+    obs, reward, done, _, _ = env.step(action)
+    env.render()
+
+env.close()
+```
+
+### 2. Training an RL Agent
+
+Train a policy using **Stable-Baselines3**:
+
+```python
+from stable_baselines3 import PPO
+from highway_simulation.environments.relative_to_ego_highway_env import HighwayEnv
+
+# Initialize the environment
+env = gym.make("highway_env")
+
+# Train PPO policy
+model = PPO("MlpPolicy", env, verbose=1)
+model.learn(total_timesteps=100000)
+
+# Save the model
+model.save("ppo_highway_model")
+```
+
+### 3. Testing and Visualization
+
+Evaluate trained policies using predefined test cases:
+
+```python
+import highway_simulation
+import gymnasium as gym
+
+from stable_baselines3 import PPO
+
+env = gym.make(id='highway_env')
+model = PPO.load("./PPO_MODEL/", env=env) 
+
+def main():
+    while True:
+        env.seed(2)
+        obs,_ = env.reset()
+        done = False
+
+        while not done:
+            action, state = model.predict(obs, deterministic=True) # RL chooses action based on the trained model
+            obs, reward, done, _,_ = env.step(action) # applying the action
+            env.render() # Rendering the environment with pygame
+            if done:
+                obs = env.reset()
+
+        env.close()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+---
+
+## Code Structure
+
+### Project Layout
+
+```plaintext
+highway_simulation/
+├── environments/       # Highway environment definitions
+├── scripts/            # Core simulation logic (vehicles, lanes, rewards, etc.)
+├── testing/            # Test scripts for RL policies
+├── tests/              # Unit tests for simulation components
+```
+
+### Key Components
+
+1. **Environment (`environments/`)**:
+
+   - `relative_to_ego_highway_env.py`: Main simulation environment.
+   - Configurable action and observation spaces.
+
+2. **Simulation Core (`scripts/`)**:
+
+   - `highway.py`: Manages the overall simulation.
+   - `vehicle.py`: Handles vehicle dynamics and properties. Longitudinally, vehicles are driven by IDM
+   - `laneManager.py`: Manages lane and traffic dynamics.
+   - `rewardCalculator.py`: Manages calculating rewards based on the states and actions.
+
+3. **Planning (`scripts/planning/`)**:
+
+   - `trajectory_planner.py`: Generates smooth trajectories with quintic polynomial trajectories.
+   - `decision_to_trajectory.py`: Converts decisions to trajectories.
+
+
+
+## Example Configurations
+
+Adjust environment parameters via the `Config` object:
+
+```python
+from highway_simulation.scripts.config import Config
+
+config = Config(
+                min_vel=13,max_vel=36,
+                min_rewardable_vel=21, max_rewardable_vel=29,
+                collision_threshold=2,lane_change_duration=6,
+                num_of_vehicles=35, road_length=51000,
+                vehicle_width=4.5,
+                vehicle_height=2,
+                screen_width=1499,
+                screen_height=1000,
+                lane_width=3.5,
+                time_step=0.3,
+                num_lanes=3,
+                effective_sim_length=20000,
+                effective_sim_time=120)
+```
+
+
+
+## Contact
+
+For inquiries or support, contact the author:
+
+- **Name**: Bedirhan Sen
+- **Email**: [bdrhnsen@gmail.com](mailto:bdrhnsen@gmail.com)
+- **GitHub**: [bdrhnsen](https://github.com/bdrhnsen)
+- **LinkedIn**: [bedirhan-sen](https://www.linkedin.com/in/bedirhan-sen/)
+
+
+
+
 
 
